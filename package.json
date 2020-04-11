@@ -1,0 +1,26 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "YelpCamp V1",
+  "main": "app.ja",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sureshkumar-ramar/YelpCamp.git"
+  },
+  "keywords": [
+    "Project"
+  ],
+  "author": "Suresh Kumar Ramar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sureshkumar-ramar/YelpCamp/issues"
+  },
+  "homepage": "https://github.com/sureshkumar-ramar/YelpCamp#readme",
+  "dependencies": {
+    "ejs": "^3.0.2",
+    "express": "^4.17.1"
+  }
+}
