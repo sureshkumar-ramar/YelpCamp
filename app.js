@@ -1,11 +1,21 @@
 var express=require("express");
 var app=express();
+var bodyParser=require("body-parser");
+
+app.use(bodyParser.urlencoded({extended:true}));
+
 app.set("view engine","ejs");
 
 var campgrounds=[
-{name:"Salmon Creek",image:"https://www.photosforclass.com/download/pixabay-1149402?webUrl=https%3A%2F%2Fpixabay.com%2Fget%2F57e1d14a4e52ae14f6da8c7dda793f7f1636dfe2564c704c7d297ed2944cc05c_1280.jpg&user=Free-Photos"},
-{name:"Granite Hill",image:"https://www.photosforclass.com/download/pixabay-3893587?webUrl=https%3A%2F%2Fpixabay.com%2Fget%2F55e8dc404f5aab14f6da8c7dda793f7f1636dfe2564c704c7d297ed2944cc05c_1280.jpg&user=FabricioMacedoPhotos"},
-{name:"Mountain Goot's Rest",image:"https://www.photosforclass.com/download/pixabay-4522970?webUrl=https%3A%2F%2Fpixabay.com%2Fget%2F52e5d7414355ac14f6da8c7dda793f7f1636dfe2564c704c7d297ed2944cc05c_1280.jpg&user=Ben_Frieden"}
+{name:"Salmon Creek",image:"https://pixabay.com/get/57e1d14a4e52ae14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Granite Hill",image:"https://pixabay.com/get/55e8dc404f5aab14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Mountain Goot's Rest",image:"https://pixabay.com/get/52e5d7414355ac14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Salmon Creek",image:"https://pixabay.com/get/57e1d14a4e52ae14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Granite Hill",image:"https://pixabay.com/get/55e8dc404f5aab14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Mountain Goot's Rest",image:"https://pixabay.com/get/52e5d7414355ac14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Salmon Creek",image:"https://pixabay.com/get/57e1d14a4e52ae14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Granite Hill",image:"https://pixabay.com/get/55e8dc404f5aab14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"},
+{name:"Mountain Goot's Rest",image:"https://pixabay.com/get/52e5d7414355ac14f1dc84609620367d1c3ed9e04e50744173297dd09f4fc2_340.jpg"}
 ];
 
 app.get("/",function(req,res){
@@ -17,6 +27,24 @@ app.get("/",function(req,res){
 app.get("/campgrounds",function(req,res){
 
     res.render("campgrounds",{campgrounds:campgrounds});
+
+});
+
+app.post("/campgrounds",function(req,res)
+{
+    var name=req.body.name;
+    var image=req.body.image;
+    var newCamp={name:name,image:image};
+    campgrounds.push(newCamp);
+    
+    res.redirect("campgrounds");
+
+
+});
+
+app.get("/campgrounds/new",function(req,res)
+{
+    res.render("new");
 
 });
 
