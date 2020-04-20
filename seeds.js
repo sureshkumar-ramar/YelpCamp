@@ -20,6 +20,7 @@ var data = [
     }
 ]
  
+
 function seedDB(){
    //Remove all campgrounds
    Campground.remove({}, function(err){

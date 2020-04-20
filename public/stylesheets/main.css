@@ -1,0 +1,17 @@
+body
+{
+    background-color: purple;
+}
+
+.img-thumbnail{
+    width: 100%;
+    padding: 0;
+}
+
+.figure .figure-caption
+{
+    padding: 9px;
+}
+
+
+
