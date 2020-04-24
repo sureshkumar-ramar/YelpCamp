@@ -2,11 +2,33 @@ var express=require("express"),
     app=express(),
     bodyParser=require("body-parser"),
     mongoose=require("mongoose"),
+    passPort=require("passport"),
+    LocalStrategy=require("passport-local"),
+    User=require("./models/user")
     Campground=require("./models/campground"),
     Comment=require("./models/comment"),
     seedDB=require("./seeds");
 
 mongoose.connect("mongodb://localhost/yelp_camp",({useNewUrlParser:true,useUnifiedTopology:true}));
+
+//passport configuration
+app.use(require("express-session")({
+    secret:"welcome to yelp camp",
+    resave:false,
+    saveUninitialized:false
+}));
+app.use(passPort.initialize());
+app.use(passPort.session());
+passPort.use(new LocalStrategy(User.authenticate()));
+passPort.serializeUser(User.serializeUser());
+passPort.deserializeUser(User.deserializeUser());
+
+app.use(function(req,res,next){
+app.locals.currentUser=req.user;
+next();
+});
+
+
 
 //seedDB();
 
@@ -47,6 +69,8 @@ app.get("/",function(req,res){
 
 });
 
+//show all campgrounds
+
 app.get("/campgrounds",function(req,res){
 
     Campground.find({},function(err,allCampgrounds)
@@ -57,7 +81,7 @@ app.get("/campgrounds",function(req,res){
         }
         else
         {
-            res.render("campgrounds/index",{campgrounds:allCampgrounds});
+            res.render("campgrounds/index",{campgrounds:allCampgrounds, currentUser:req.user});
         }
 
     });
@@ -116,7 +140,7 @@ app.get("/campgrounds/:id",function(req,res)
     
 });
 
-app.get("/campgrounds/:id/comments/new",function(req,res){
+app.get("/campgrounds/:id/comments/new", isLoggedIn ,function(req,res){
 
     Campground.findById(req.params.id,function(err,foundground){
 
@@ -132,7 +156,7 @@ app.get("/campgrounds/:id/comments/new",function(req,res){
 });
 
 
-app.post("/campgrounds/:id/comments",function(req,res){
+app.post("/campgrounds/:id/comments",isLoggedIn,function(req,res){
 
     Campground.findById(req.params.id,function(err,campground){
 
@@ -164,6 +188,59 @@ app.post("/campgrounds/:id/comments",function(req,res){
     });
 
 });
+
+//Auth Routes
+//show register form
+app.get("/register",function(req,res){
+    res.render("register");
+});
+
+//register logic
+app.post("/register",function(req,res){
+
+    var newUser=new User({username:req.body.username});
+    User.register(newUser,req.body.password,function(err,user){
+        if(err)
+        {
+            console.log(err);
+            return res.render("register");
+        }
+        passPort.authenticate("local")(req,res,function(){
+            res.redirect("/campgrounds");
+
+        });
+    });
+   
+});
+
+//login show form
+
+app.get("/login",function(req,res){
+    res.render("login");
+});
+
+
+//login logic
+
+app.post("/login",passPort.authenticate("local",
+{
+    successRedirect:"/campgrounds",
+    failureRedirect:"/login"
+}),function(req,res){
+
+});
+
+app.get("/logout",function(req,res){
+    req.logout();
+    res.redirect("/campgrounds");
+});
+
+function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 
 app.listen(3000,function()

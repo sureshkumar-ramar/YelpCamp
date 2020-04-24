@@ -34,12 +34,27 @@
                 </li>
               </ul>
               <ul class="navbar-nav mr-lg-0">
+                <% if(!currentUser){ %>
                 <li class="nav-item">
-                  <a class="nav-link" href="#"><i class="fa fa-user-plus"></i> Sign UP</a>
+                  <a class="nav-link" href="/login"><i class="fa fa-sign-in"></i> Login</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#"><i class="fa fa-sign-in"></i> Login</a>
+                  <a class="nav-link" href="/register"><i class="fa fa-user-plus"></i> Sign UP</a>
                 </li>
+                <%} else{ %>
+                  
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                  Signed in as <%= currentUser.username %>
+                </a>
+                </li>
+
+                
+                <li class="nav-item">
+                  <a class="nav-link" href="/logout"><i class="fa fa-sign-in"></i> Logout</a>
+                </li>
+                <% } %>
+               
               </ul>
             </div>
           </div>
