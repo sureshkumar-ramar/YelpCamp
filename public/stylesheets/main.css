@@ -1,6 +1,6 @@
 body
 {
-    background-color: purple;
+    /* background-color: purple; */
 }
 
 .img-thumbnail{
@@ -13,5 +13,7 @@ body
     padding: 9px;
 }
 
-
+#delete-form, #delete-comment{
+    display: inline;
+}
 
